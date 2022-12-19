@@ -1,0 +1,178 @@
+* {
+    padding: 0;
+    margin: 0;
+    border: 0;
+    text-decoration: none;
+    list-style: none;
+    font-family: 'Share Tech Mono', monospace;
+}
+
+button {
+    cursor: pointer;
+}
+
+#app {
+    display: grid;
+    width: 100vw;
+    height: 100vh;
+}
+
+.game {
+    place-self: center;
+    width: calc(100% / (1.618 * 1.618));
+    height: calc(100% / 1.618);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    grid-template-areas: "controls controls screen screen"
+        "moves moves keypad keypad"
+        "moves moves keypad keypad"
+        "moves moves keypad keypad";
+    border: 1px rgb(80, 80, 80) solid;
+}
+
+.screen {
+    grid-area: screen;
+    width: 100%;
+}
+
+.screen form {
+    height: 100%;
+    display: grid;
+    grid-template-areas: "m m"
+        "i i";
+}
+
+.screen input {
+    grid-area: i;
+    place-self: end center;
+    width: 100%;
+    /* height: 100%; */
+    text-align: right;
+    font-size: 5rem;
+    line-height: 100%;
+    background: none;
+}
+
+.screen .hint {
+    grid-area: m;
+    text-align: center;
+    padding: 15px;
+}
+
+.controls {
+    grid-area: controls;
+    background-color: rgb(97, 97, 97);
+    display: grid;
+}
+
+/* .controls ~ {
+    
+} */
+.attempt-list {
+    grid-area: moves;
+    background-color: rgb(133, 133, 133);
+    border-top: .5px white solid;
+    padding: 15px 10px;
+}
+
+.keypad {
+    grid-area: keypad;
+    background-color: rgb(59, 59, 59);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    grid-template-areas: "seven eight nine clear"
+        "four five six clear"
+        "one two three enter"
+        "delete zero minus enter";
+}
+
+.keypad button {
+    border: .5px white solid;
+}
+
+.enter-btn {
+    grid-area: enter;
+}
+
+.delete-btn {
+    grid-area: delete;
+}
+
+.clear-btn {
+    grid-area: clear;
+}
+
+.btn1 {
+    grid-area: one;
+}
+
+.btn2 {
+    grid-area: two;
+}
+
+.btn3 {
+    grid-area: three;
+}
+
+.btn4 {
+    grid-area: four;
+}
+
+.btn5 {
+    grid-area: five;
+}
+
+.btn6 {
+    grid-area: six;
+}
+
+.btn7 {
+    grid-area: seven;
+}
+
+.btn8 {
+    grid-area: eight;
+}
+
+.btn9 {
+    grid-area: nine;
+}
+
+.btn0 {
+    grid-area: zero;
+}
+
+.container {
+    display: grid;
+    height: 100vh;
+}
+
+.centered {
+    place-self: center;
+    width: 200px;
+    background: yellow;
+    height: 100px;
+    display: grid;
+}
+.up {
+    --color: #e48e58;
+    --hover: #e4e458;
+}
+
+.up:hover,
+.up:focus {
+    box-shadow: inset 0 200px 0 0 var(--hover);
+}
+
+button {
+    color: var(--color);
+    transition: 0.25s;
+}
+
+button:hover,
+button:focus {
+    border-color: var(--hover);
+    color: rgb(0, 0, 0);
+}
