@@ -66,14 +66,26 @@ button {
     display: grid;
 }
 
-/* .controls ~ {
-    
-} */
 .attempt-list {
     grid-area: moves;
     background-color: rgb(133, 133, 133);
     border-top: .5px white solid;
     padding: 15px 10px;
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.attempt-list::-webkit-scrollbar {
+    display: none;
+}
+
+.attempt-list>ul {
+    margin-top: 10px;
+}
+
+.attempt-list ul li {
+    font-size: .8em;
 }
 
 .keypad {
@@ -156,6 +168,7 @@ button {
     height: 100px;
     display: grid;
 }
+
 .up {
     --color: #e48e58;
     --hover: #e4e458;

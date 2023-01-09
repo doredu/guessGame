@@ -2,64 +2,24 @@ import React from "react";
 import { useCallback, useEffect, useState } from "react";
 import Keypad from "./Keypad";
 import emojiMapper from "./emojiMapper";
+import { Brain } from "./Brain";
 
 const CONFIG = {
   maxAttempts: 10,
 };
-
-const getMessage = (guess: string, rnd: number, lastGuess: number): string => {
-  // console.log(`getMessage(${guess}, ${rnd}, ${lastGuess}`);
-  let message: "Hot" | "Warm" | "Cold" | "Bingo" = "Cold";
-  // if (!Number.isInteger(guess)) return "";
-  const guessNo = Number(guess);
-
-  const diff1 = Math.abs(rnd - guessNo);
-  const diff2 = Math.abs(rnd - lastGuess);
-
-  switch (true) {
-    case diff1 === 0:
-      message = "Bingo";
-      break;
-    case diff1 < 10:
-      message = "Hot";
-      break;
-    case diff1 <= 50:
-      message = "Warm";
-      break;
-    case diff1 > 50:
-      message = "Cold";
-      break;
-    default:
-      break;
-  }
-  console.log(diff1, diff2, Math.abs(diff1 - diff2));
-  return diff1 < diff2 && Math.abs(diff1 - diff2) <= 10
-    ? betterMessage(message)
-    : message;
-};
-
-const getRandom = (max: number) => {
-  return Math.floor(Math.random() * max);
-};
-
-const betterMessage = (message: "Hot" | "Warm" | "Cold" | "Bingo") => {
-  if (message === "Hot") return "Hotter";
-  if (message === "Warm") return "Warmer";
-  if (message === "Cold") return "Colder";
-  if (message === "Bingo") return "Bingo";
-  return "";
-};
+const brain = new Brain({
+  max: 100,
+  attempts: 10,
+});
 const isNumber = (value: string) => {
   return !Number.isNaN(Number(value));
 };
 
 const Game = () => {
-  const [guess, setGuess] = useState("");
   const [started, setStarted] = useState(false);
-  const [rnd, setRnd] = useState(getRandom(100));
+  const [guess, setGuess] = useState("");
   const [count, setCount] = useState<number>(0);
   const [message, setMessage] = useState<string>("");
-  const [lastGuess, setLastGuess] = useState<number>(rnd);
   const [attempts, setAttempts] = useState<
     Array<{ number: number; message: string }>
   >([]);
@@ -67,22 +27,15 @@ const Game = () => {
   const addAttempt = (number: number, message: string) => {
     setAttempts((prevState) => [...prevState, { number, message }]);
   };
-
-  const startGame = () => {
-    let generatedNumber = getRandom(100);
-    setRnd(generatedNumber);
-    setCount(0);
+  const restart = () => {
     setMessage("");
+    setCount(0);
     setAttempts([]);
-    setLastGuess(generatedNumber);
+    brain.start();
   };
-
   const checkGuess = () => {
-    console.log(`getMessage(${guess}, ${rnd}, ${lastGuess}`);
-
-    const message = getMessage(guess, rnd, lastGuess);
+    const message = brain.checkNumber(Number(guess)) || "";
     setMessage(message);
-    setLastGuess(Number(guess || rnd));
     addAttempt(Number(guess), message);
     setCount((count) => count + 1);
     setGuess("");
@@ -92,8 +45,6 @@ const Game = () => {
     action: "delete" | "clear" | "input" | "enter",
     value?: string
   ) => {
-    // console.log(`action: ${action}, value: ${value}`);
-
     switch (action) {
       case "delete":
         return setGuess((prevState) => prevState.slice(0, -1));
@@ -125,18 +76,21 @@ const Game = () => {
   }, [guess]);
 
   useEffect(() => {
-    if (count >= CONFIG.maxAttempts) return alert("no more tries");
+    if (count >= CONFIG.maxAttempts) {
+    }
   }, [count]);
-
-  useEffect(() => {
-    startGame();
-  }, [started]);
 
   if (!started)
     return (
       <div className="container">
         <div className="centered">
-          <button type="button" onClick={() => setStarted(true)}>
+          <button
+            type="button"
+            onClick={() => {
+              brain.start();
+              setStarted(true);
+            }}
+          >
             {emojiMapper("start")}
             <p>Start game</p>
           </button>
@@ -169,7 +123,7 @@ const Game = () => {
         clickHandler={actionReducer}
       />
       <div className="controls">
-        <button type="button" onClick={() => startGame()}>
+        <button type="button" onClick={() => restart()}>
           {emojiMapper("restart")}
         </button>
       </div>
